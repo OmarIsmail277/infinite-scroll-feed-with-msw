@@ -1,75 +1,107 @@
-# React + TypeScript + Vite
+# 🛍️ Infinite Scroll Product Feed
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive infinite scroll product catalog built with React, TypeScript, React Query, and Mock Service Worker (MSW).
 
-Currently, two official plugins are available:
+🔗 **Live Demo:** [https://your-app-name.netlify.app](https://your-app-name.netlify.app)  
+📦 **Repository:** [https://github.com/OmarIsmail277/infinite-scroll-feed-with-msw](https://github.com/OmarIsmail277/infinite-scroll-feed-with-msw)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+### Core Features ✅
 
-Note: This will impact Vite dev & build performances.
+- Infinite scroll (20 items per page, 131+ total products)
+- Pagination handled through `useInfiniteQuery`
+- Mock API using MSW with simulated network delays (300–1000ms)
+- Fully responsive design (mobile, tablet, desktop)
+- Loading states and error handling with retry
+- TypeScript for full type safety
 
-## Expanding the ESLint configuration
+### Bonus Features 🎁
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Search functionality with **3-character minimum**
+- Enter key support + search button for manual triggering
+- Category filtering
+- Active filter display
+- Clear filters button
+- Clean and modern UI using Tailwind CSS
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 🛠️ Tech Stack
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- React 18 + TypeScript
+- React Query (TanStack Query)
+- MSW (Mock Service Worker)
+- Tailwind CSS
+- Vite
+- Axios
+- Intersection Observer API
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🎯 Key Implementation Details
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Infinite Scroll
+
+- Uses Intersection Observer API for smooth performance
+- Avoids scroll event listeners for efficiency
+
+### React Query
+
+- `useInfiniteQuery` handles:
+  - Pagination (`pageParam`)
+  - Caching and deduplication
+  - Loading, error, and retry states
+- Race conditions fixed with null checks and safe rendering
+
+### MSW Mock API
+
+- Intercepts requests to `/api/products?page={n}`
+- Returns paginated results with:
+  - Simulated latency
+  - Search and category filtering
+- ⚠️ Note: Chrome may unload service workers after ~5 minutes of inactivity, causing MSW to stop until refreshed
+
+### Search & Filter Logic
+
+- Search triggers only when:
+  - Input is empty, or
+  - Input length ≥3 characters
+- Supports Enter key + search button
+- Clear button resets search, category, and infinite scroll
+- Fixed issues:
+  - Input binding prevented typing
+  - Pagination logic now uses filtered products
+
+---
+
+## 🧠 Time Spent (Approx. 7 Hours) - Most of the time spent was on the bonus feature (search/filter)
+
+- 🧠 Planning architecture (infinite scroll, pagination, API flow)
+- 🧪 Setting up MSW with realistic delays
+- 🎁 Implementing bonus features:
+  - Search (min-length, Enter key support, clear button)
+  - Category filtering
+- ⚙️ Ensuring filters interact correctly with pagination & infinite scroll
+- 🐛 Fixing React Query race conditions & Chrome/MSW idle behavior
+- 🎨 UI/UX improvements with Tailwind CSS
+- Ensuring clean, scalable, production-like structure
+
+---
+
+## 📦 Setup
+
+```bash
+# Clone repository and install dependencies
+git clone https://github.com/OmarIsmail277/infinite-scroll-feed-with-msw
+cd infinite-scroll-feed-with-msw
+npm install
+
+# Initialize MSW
+npx msw init public/ --save
+
+# Run development server
+npm run dev
 ```
