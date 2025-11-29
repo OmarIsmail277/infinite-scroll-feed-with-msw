@@ -8,8 +8,9 @@ const ITEMS_PER_PAGE = 20;
 // that happens inside the resolver function, as a second arg which is a callback fun
 export const handlers = [
   http.get("/api/products", async ({ request }) => {
-    const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get("page") || "0");
+    const url = new URL(request.url, window.location.origin);
+    const pageParam = url.searchParams.get("page");
+    const page = pageParam ? parseInt(pageParam, 10) : 0;
 
     // Stimualte network delay (300~1000ms)
     await delay(300 + Math.random() * 700);

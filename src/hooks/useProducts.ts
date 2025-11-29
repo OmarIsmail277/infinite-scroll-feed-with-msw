@@ -5,7 +5,7 @@ import type { ProductsResponse } from "../types/products";
 
 const fetchProducts = async (page: number): Promise<ProductsResponse> => {
   const response = await axios.get<ProductsResponse>(
-    `/api/products?page=?${page}`
+    `/api/products?page=${page}`
   );
   return response.data;
 };
