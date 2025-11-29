@@ -14,16 +14,6 @@ export const handlers = [
     const search = url.searchParams.get("search") || "";
     const category = url.searchParams.get("category") || "all";
 
-    console.log("🎯 MSW Handler triggered!");
-    console.log(
-      "📄 Page:",
-      page,
-      "| 🔍 Search:",
-      search,
-      "| 📂 Category:",
-      category
-    );
-
     // Stimualte network delay (300~1000ms)
     await delay(300 + Math.random() * 700);
 
@@ -60,14 +50,6 @@ export const handlers = [
     const end = start + ITEMS_PER_PAGE;
     const products = filteredProducts.slice(start, end);
     const hasMore = end < filteredProducts.length;
-
-    console.log(
-      "✅ Returning products:",
-      products.length,
-      "of",
-      filteredProducts.length,
-      "filtered"
-    );
 
     const response: ProductsResponse = {
       products,
