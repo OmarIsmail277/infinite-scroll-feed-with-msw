@@ -5,12 +5,24 @@ import type { ProductsResponse } from "../types/products";
 const ITEMS_PER_PAGE = 20;
 
 // every request you're gonna mock, you need a handler for it, the handler is going to intercept that request and is going to return a mock response
-// that happens inside the resolver function, as a second arg which is a callback fun
 export const handlers = [
   http.get("/api/products", async ({ request }) => {
     const url = new URL(request.url, window.location.origin);
     const pageParam = url.searchParams.get("page");
     const page = pageParam ? parseInt(pageParam, 10) : 0;
+
+    const search = url.searchParams.get("search") || "";
+    const category = url.searchParams.get("category") || "all";
+
+    console.log("🎯 MSW Handler triggered!");
+    console.log(
+      "📄 Page:",
+      page,
+      "| 🔍 Search:",
+      search,
+      "| 📂 Category:",
+      category
+    );
 
     // Stimualte network delay (300~1000ms)
     await delay(300 + Math.random() * 700);
@@ -23,16 +35,45 @@ export const handlers = [
       );
     }
 
+    // Filter products based on search and category
+    let filteredProducts = mockProducts;
+
+    // Apply category filter
+    if (category !== "all") {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.category === category
+      );
+    }
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      filteredProducts = filteredProducts.filter(
+        (product) =>
+          product.name.toLowerCase().includes(searchLower) ||
+          product.description.toLowerCase().includes(searchLower) ||
+          product.category.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Paginate filtered results
     const start = page * ITEMS_PER_PAGE;
     const end = start + ITEMS_PER_PAGE;
-    const products = mockProducts.slice(start, end);
-    const hasMore = end < mockProducts.length;
+    const products = filteredProducts.slice(start, end);
+    const hasMore = end < filteredProducts.length;
+
+    console.log(
+      "✅ Returning products:",
+      products.length,
+      "of",
+      filteredProducts.length,
+      "filtered"
+    );
 
     const response: ProductsResponse = {
       products,
       hasMore,
       nextPage: hasMore ? page + 1 : null,
-      total: mockProducts.length,
+      total: filteredProducts.length,
     };
 
     return HttpResponse.json(response);

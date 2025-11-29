@@ -1,6 +1,6 @@
 import type { Product } from "../types/products";
 
-const categories = [
+export const categories = [
   "Electronics",
   "Clothing",
   "Books",
@@ -63,7 +63,9 @@ export const generateProducts = (count: number = 131): Product[] => {
       description: `High-quality ${productType.toLowerCase()} perfect for your needs. Features advanced technology and premium materials.`,
       price: parseFloat((Math.random() * 500 + 10).toFixed(2)),
       category,
-      imageUrl: `https://picsum.photos/seed/${index + 1}/400/300`,
+      imageUrl: `https://dummyimage.com/400x300/667eea/fff.png&text=Product+${
+        index + 1
+      }`,
       rating: parseFloat((Math.random() * 2 + 3).toFixed(1)), // 3.0 - 5.0
       inStock: Math.random() > 0.1, // 90% in stock
       createdAt: new Date(
