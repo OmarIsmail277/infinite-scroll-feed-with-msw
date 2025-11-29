@@ -1,29 +1,20 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ProductFeed from "./components/ProductFeed";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 function App() {
-  type User = {
-    id: number;
-    name: string;
-  };
-  const [users, setUsers] = useState<User[]>([]);
-
-  useEffect(() => {
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setUsers(data);
-      });
-  }, []);
   return (
-    <div className="d-flex items-center">
-      {users.map((user) => (
-        <div key={user.id} className="bg-amber-600">
-          {user.name}
-        </div>
-      ))}
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <ProductFeed />
+    </QueryClientProvider>
   );
 }
 
